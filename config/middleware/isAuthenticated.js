@@ -9,6 +9,17 @@ const isAuthenticated = (req, res, next) => {
     console.log('Not Authenticated... Redirecting');
     res.redirect('/');
   }
+  
+  //I like this way:
+  
+   if (req.user) {
+    console.log('Authenticated', req.session.passport.user);
+    next();
+     return;
+   }
+  
+  console.log('Not Authenticated... Redirecting');
+  res.redirect('/');
 };
 
 module.exports = isAuthenticated;
