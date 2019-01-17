@@ -1,11 +1,18 @@
 'use strict';
+// I think you can separate this file to some files - auth, news, categories, profile
+
+
 // Requiring our models and passport as we've configured it
 const db = require('../models');
 const passport = require('../config/passport.js');
+// I dont like camel case and big letters when i write be files names. only kebab case (news-api)
 const newsapi = require('../app/newsAPI/news.js');
 
 module.exports = app => {
+
+  // you dont need the suffix api
   app.get('/newsapi/trending', (req, res) => {
+    // I recommend you to create a logger file which will be a service (some functions of log, error) and it will call console.log. this will gicve you the option in the future to replace it only inside the service in order to log it to log files or to an analytic tool like kibana
     console.log('Sending trending articles...');
     newsapi.v2
       .topHeadlines({
@@ -25,6 +32,7 @@ module.exports = app => {
     console.log('Sending articles by category...');
     const articleArr = [];
     const apiCall = choicesArr => {
+      // prefer const over let
       let apiPromise = new Promise((resolve, reject) => {
         console.log('In apiCall function');
         choicesArr.forEach(choice => {
@@ -66,6 +74,12 @@ module.exports = app => {
       const cat = data.dataValues;
       const choices = [];
 
+      // you can write here instead of this code
+      const blabla = ['business', 'entertainment', 'health']
+      blabla.forEach((bla) {
+        if (choices[bla]) choices.push(bla);           
+      });
+      
       if (cat.business) {
         choices.push('business');
       }
@@ -162,6 +176,7 @@ module.exports = app => {
     }
   });
 
+  // you dont need the word delete in the route
   app.delete('/api/delete-account', (req, res) => {
     db.Categories.destroy({
       where: {
